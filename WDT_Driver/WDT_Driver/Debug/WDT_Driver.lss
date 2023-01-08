@@ -1,0 +1,440 @@
+
+WDT_Driver.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000028c  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000002e0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000002e0  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000310  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000090  00000000  00000000  0000034c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000096a  00000000  00000000  000003dc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000006e2  00000000  00000000  00000d46  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000004fc  00000000  00000000  00001428  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000cc  00000000  00000000  00001924  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000426  00000000  00000000  000019f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000375  00000000  00000000  00001e16  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000060  00000000  00000000  0000218b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 44 01 	jmp	0x288	; 0x288 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+#include <util/delay.h>
+
+
+int main(void)
+{ 
+	  DIO_vid_SetPintDirection(DIO_u8PORTA,DIO_u8PIN0,OUTPUT) ;
+  6c:	4f ef       	ldi	r20, 0xFF	; 255
+  6e:	60 e0       	ldi	r22, 0x00	; 0
+  70:	80 e0       	ldi	r24, 0x00	; 0
+  72:	0e 94 c8 00 	call	0x190	; 0x190 <DIO_vid_SetPintDirection>
+	  
+	  WDT_Start(time_16_3ms) ;
+  76:	80 e0       	ldi	r24, 0x00	; 0
+  78:	0e 94 38 01 	call	0x270	; 0x270 <WDT_Start>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  7c:	2f ef       	ldi	r18, 0xFF	; 255
+  7e:	8b e4       	ldi	r24, 0x4B	; 75
+  80:	9d e1       	ldi	r25, 0x1D	; 29
+  82:	21 50       	subi	r18, 0x01	; 1
+  84:	80 40       	sbci	r24, 0x00	; 0
+  86:	90 40       	sbci	r25, 0x00	; 0
+  88:	e1 f7       	brne	.-8      	; 0x82 <main+0x16>
+  8a:	00 c0       	rjmp	.+0      	; 0x8c <main+0x20>
+  8c:	00 00       	nop
+	  
+	  
+     
+    while (1) 
+    {
+		DIO_vid_SetPintValue(DIO_u8PORTA,DIO_u8PIN0,HIGH) ;
+  8e:	41 e0       	ldi	r20, 0x01	; 1
+  90:	60 e0       	ldi	r22, 0x00	; 0
+  92:	80 e0       	ldi	r24, 0x00	; 0
+  94:	0e 94 58 00 	call	0xb0	; 0xb0 <DIO_vid_SetPintValue>
+  98:	2f e7       	ldi	r18, 0x7F	; 127
+  9a:	89 ea       	ldi	r24, 0xA9	; 169
+  9c:	93 e0       	ldi	r25, 0x03	; 3
+  9e:	21 50       	subi	r18, 0x01	; 1
+  a0:	80 40       	sbci	r24, 0x00	; 0
+  a2:	90 40       	sbci	r25, 0x00	; 0
+  a4:	e1 f7       	brne	.-8      	; 0x9e <main+0x32>
+  a6:	00 c0       	rjmp	.+0      	; 0xa8 <main+0x3c>
+  a8:	00 00       	nop
+		_delay_ms(100) ;
+	//	DIO_vid_SetPintValue(DIO_u8PORTA,DIO_u8PIN0,LOW) ;
+	//	_delay_ms(500) ;
+		
+		WDT_Stop() ;
+  aa:	0e 94 3f 01 	call	0x27e	; 0x27e <WDT_Stop>
+  ae:	ef cf       	rjmp	.-34     	; 0x8e <main+0x22>
+
+000000b0 <DIO_vid_SetPintValue>:
+/* set pin value */
+extern void DIO_vid_SetPintValue(u8 u8port, u8 u8pin ,u8 u8value) {
+
+
+
+	if (u8value==HIGH){
+  b0:	41 30       	cpi	r20, 0x01	; 1
+  b2:	a1 f5       	brne	.+104    	; 0x11c <DIO_vid_SetPintValue+0x6c>
+
+
+		switch (u8port){
+  b4:	81 30       	cpi	r24, 0x01	; 1
+  b6:	89 f0       	breq	.+34     	; 0xda <DIO_vid_SetPintValue+0x2a>
+  b8:	28 f0       	brcs	.+10     	; 0xc4 <DIO_vid_SetPintValue+0x14>
+  ba:	82 30       	cpi	r24, 0x02	; 2
+  bc:	c9 f0       	breq	.+50     	; 0xf0 <DIO_vid_SetPintValue+0x40>
+  be:	83 30       	cpi	r24, 0x03	; 3
+  c0:	11 f1       	breq	.+68     	; 0x106 <DIO_vid_SetPintValue+0x56>
+  c2:	08 95       	ret
+
+			case   DIO_u8PORTA: SET_BIT( DIO_u8PORTA_REG,u8pin) ; break ;
+  c4:	2b b3       	in	r18, 0x1b	; 27
+  c6:	81 e0       	ldi	r24, 0x01	; 1
+  c8:	90 e0       	ldi	r25, 0x00	; 0
+  ca:	02 c0       	rjmp	.+4      	; 0xd0 <DIO_vid_SetPintValue+0x20>
+  cc:	88 0f       	add	r24, r24
+  ce:	99 1f       	adc	r25, r25
+  d0:	6a 95       	dec	r22
+  d2:	e2 f7       	brpl	.-8      	; 0xcc <DIO_vid_SetPintValue+0x1c>
+  d4:	82 2b       	or	r24, r18
+  d6:	8b bb       	out	0x1b, r24	; 27
+  d8:	08 95       	ret
+			case   DIO_u8PORTB: SET_BIT( DIO_u8PORTB_REG,u8pin) ; break ;
+  da:	28 b3       	in	r18, 0x18	; 24
+  dc:	81 e0       	ldi	r24, 0x01	; 1
+  de:	90 e0       	ldi	r25, 0x00	; 0
+  e0:	02 c0       	rjmp	.+4      	; 0xe6 <DIO_vid_SetPintValue+0x36>
+  e2:	88 0f       	add	r24, r24
+  e4:	99 1f       	adc	r25, r25
+  e6:	6a 95       	dec	r22
+  e8:	e2 f7       	brpl	.-8      	; 0xe2 <DIO_vid_SetPintValue+0x32>
+  ea:	82 2b       	or	r24, r18
+  ec:	88 bb       	out	0x18, r24	; 24
+  ee:	08 95       	ret
+			case   DIO_u8PORTC: SET_BIT( DIO_u8PORTC_REG,u8pin) ; break ;
+  f0:	25 b3       	in	r18, 0x15	; 21
+  f2:	81 e0       	ldi	r24, 0x01	; 1
+  f4:	90 e0       	ldi	r25, 0x00	; 0
+  f6:	02 c0       	rjmp	.+4      	; 0xfc <DIO_vid_SetPintValue+0x4c>
+  f8:	88 0f       	add	r24, r24
+  fa:	99 1f       	adc	r25, r25
+  fc:	6a 95       	dec	r22
+  fe:	e2 f7       	brpl	.-8      	; 0xf8 <DIO_vid_SetPintValue+0x48>
+ 100:	82 2b       	or	r24, r18
+ 102:	85 bb       	out	0x15, r24	; 21
+ 104:	08 95       	ret
+			case   DIO_u8PORTD: SET_BIT( DIO_u8PORTD_REG,u8pin) ; break ;
+ 106:	22 b3       	in	r18, 0x12	; 18
+ 108:	81 e0       	ldi	r24, 0x01	; 1
+ 10a:	90 e0       	ldi	r25, 0x00	; 0
+ 10c:	02 c0       	rjmp	.+4      	; 0x112 <DIO_vid_SetPintValue+0x62>
+ 10e:	88 0f       	add	r24, r24
+ 110:	99 1f       	adc	r25, r25
+ 112:	6a 95       	dec	r22
+ 114:	e2 f7       	brpl	.-8      	; 0x10e <DIO_vid_SetPintValue+0x5e>
+ 116:	82 2b       	or	r24, r18
+ 118:	82 bb       	out	0x12, r24	; 18
+ 11a:	08 95       	ret
+
+			default : /* worng port */ break;
+		}
+	}
+	else if (u8value==LOW){
+ 11c:	41 11       	cpse	r20, r1
+ 11e:	37 c0       	rjmp	.+110    	; 0x18e <DIO_vid_SetPintValue+0xde>
+
+		switch (u8port){
+ 120:	81 30       	cpi	r24, 0x01	; 1
+ 122:	91 f0       	breq	.+36     	; 0x148 <DIO_vid_SetPintValue+0x98>
+ 124:	28 f0       	brcs	.+10     	; 0x130 <DIO_vid_SetPintValue+0x80>
+ 126:	82 30       	cpi	r24, 0x02	; 2
+ 128:	d9 f0       	breq	.+54     	; 0x160 <DIO_vid_SetPintValue+0xb0>
+ 12a:	83 30       	cpi	r24, 0x03	; 3
+ 12c:	29 f1       	breq	.+74     	; 0x178 <DIO_vid_SetPintValue+0xc8>
+ 12e:	08 95       	ret
+			case  DIO_u8PORTA: CLR_BIT( DIO_u8PORTA_REG,u8pin) ; break ;
+ 130:	2b b3       	in	r18, 0x1b	; 27
+ 132:	81 e0       	ldi	r24, 0x01	; 1
+ 134:	90 e0       	ldi	r25, 0x00	; 0
+ 136:	02 c0       	rjmp	.+4      	; 0x13c <DIO_vid_SetPintValue+0x8c>
+ 138:	88 0f       	add	r24, r24
+ 13a:	99 1f       	adc	r25, r25
+ 13c:	6a 95       	dec	r22
+ 13e:	e2 f7       	brpl	.-8      	; 0x138 <DIO_vid_SetPintValue+0x88>
+ 140:	80 95       	com	r24
+ 142:	82 23       	and	r24, r18
+ 144:	8b bb       	out	0x1b, r24	; 27
+ 146:	08 95       	ret
+			case   DIO_u8PORTB: CLR_BIT( DIO_u8PORTB_REG,u8pin) ; break ;
+ 148:	28 b3       	in	r18, 0x18	; 24
+ 14a:	81 e0       	ldi	r24, 0x01	; 1
+ 14c:	90 e0       	ldi	r25, 0x00	; 0
+ 14e:	02 c0       	rjmp	.+4      	; 0x154 <DIO_vid_SetPintValue+0xa4>
+ 150:	88 0f       	add	r24, r24
+ 152:	99 1f       	adc	r25, r25
+ 154:	6a 95       	dec	r22
+ 156:	e2 f7       	brpl	.-8      	; 0x150 <DIO_vid_SetPintValue+0xa0>
+ 158:	80 95       	com	r24
+ 15a:	82 23       	and	r24, r18
+ 15c:	88 bb       	out	0x18, r24	; 24
+ 15e:	08 95       	ret
+			case   DIO_u8PORTC: CLR_BIT( DIO_u8PORTC_REG,u8pin) ; break ;
+ 160:	25 b3       	in	r18, 0x15	; 21
+ 162:	81 e0       	ldi	r24, 0x01	; 1
+ 164:	90 e0       	ldi	r25, 0x00	; 0
+ 166:	02 c0       	rjmp	.+4      	; 0x16c <DIO_vid_SetPintValue+0xbc>
+ 168:	88 0f       	add	r24, r24
+ 16a:	99 1f       	adc	r25, r25
+ 16c:	6a 95       	dec	r22
+ 16e:	e2 f7       	brpl	.-8      	; 0x168 <DIO_vid_SetPintValue+0xb8>
+ 170:	80 95       	com	r24
+ 172:	82 23       	and	r24, r18
+ 174:	85 bb       	out	0x15, r24	; 21
+ 176:	08 95       	ret
+			case   DIO_u8PORTD: CLR_BIT( DIO_u8PORTD_REG,u8pin) ; break ;
+ 178:	22 b3       	in	r18, 0x12	; 18
+ 17a:	81 e0       	ldi	r24, 0x01	; 1
+ 17c:	90 e0       	ldi	r25, 0x00	; 0
+ 17e:	02 c0       	rjmp	.+4      	; 0x184 <DIO_vid_SetPintValue+0xd4>
+ 180:	88 0f       	add	r24, r24
+ 182:	99 1f       	adc	r25, r25
+ 184:	6a 95       	dec	r22
+ 186:	e2 f7       	brpl	.-8      	; 0x180 <DIO_vid_SetPintValue+0xd0>
+ 188:	80 95       	com	r24
+ 18a:	82 23       	and	r24, r18
+ 18c:	82 bb       	out	0x12, r24	; 18
+ 18e:	08 95       	ret
+
+00000190 <DIO_vid_SetPintDirection>:
+/* set pin direction */
+extern void DIO_vid_SetPintDirection(u8 u8port,u8 u8pin,u8  u8dir) {
+
+
+
+	if (u8dir==OUTPUT){
+ 190:	4f 3f       	cpi	r20, 0xFF	; 255
+ 192:	a1 f5       	brne	.+104    	; 0x1fc <DIO_vid_SetPintDirection+0x6c>
+
+
+		switch (u8port){
+ 194:	81 30       	cpi	r24, 0x01	; 1
+ 196:	89 f0       	breq	.+34     	; 0x1ba <DIO_vid_SetPintDirection+0x2a>
+ 198:	28 f0       	brcs	.+10     	; 0x1a4 <DIO_vid_SetPintDirection+0x14>
+ 19a:	82 30       	cpi	r24, 0x02	; 2
+ 19c:	c9 f0       	breq	.+50     	; 0x1d0 <DIO_vid_SetPintDirection+0x40>
+ 19e:	83 30       	cpi	r24, 0x03	; 3
+ 1a0:	11 f1       	breq	.+68     	; 0x1e6 <DIO_vid_SetPintDirection+0x56>
+ 1a2:	08 95       	ret
+
+			case   DIO_u8PORTA: SET_BIT( DIO_u8DDRA_REG,u8pin) ; break ;
+ 1a4:	2a b3       	in	r18, 0x1a	; 26
+ 1a6:	81 e0       	ldi	r24, 0x01	; 1
+ 1a8:	90 e0       	ldi	r25, 0x00	; 0
+ 1aa:	02 c0       	rjmp	.+4      	; 0x1b0 <DIO_vid_SetPintDirection+0x20>
+ 1ac:	88 0f       	add	r24, r24
+ 1ae:	99 1f       	adc	r25, r25
+ 1b0:	6a 95       	dec	r22
+ 1b2:	e2 f7       	brpl	.-8      	; 0x1ac <DIO_vid_SetPintDirection+0x1c>
+ 1b4:	82 2b       	or	r24, r18
+ 1b6:	8a bb       	out	0x1a, r24	; 26
+ 1b8:	08 95       	ret
+			case   DIO_u8PORTB: SET_BIT( DIO_u8DDRB_REG,u8pin) ; break ;
+ 1ba:	27 b3       	in	r18, 0x17	; 23
+ 1bc:	81 e0       	ldi	r24, 0x01	; 1
+ 1be:	90 e0       	ldi	r25, 0x00	; 0
+ 1c0:	02 c0       	rjmp	.+4      	; 0x1c6 <DIO_vid_SetPintDirection+0x36>
+ 1c2:	88 0f       	add	r24, r24
+ 1c4:	99 1f       	adc	r25, r25
+ 1c6:	6a 95       	dec	r22
+ 1c8:	e2 f7       	brpl	.-8      	; 0x1c2 <DIO_vid_SetPintDirection+0x32>
+ 1ca:	82 2b       	or	r24, r18
+ 1cc:	87 bb       	out	0x17, r24	; 23
+ 1ce:	08 95       	ret
+			case   DIO_u8PORTC: SET_BIT( DIO_u8DDRC_REG,u8pin) ; break ;
+ 1d0:	24 b3       	in	r18, 0x14	; 20
+ 1d2:	81 e0       	ldi	r24, 0x01	; 1
+ 1d4:	90 e0       	ldi	r25, 0x00	; 0
+ 1d6:	02 c0       	rjmp	.+4      	; 0x1dc <DIO_vid_SetPintDirection+0x4c>
+ 1d8:	88 0f       	add	r24, r24
+ 1da:	99 1f       	adc	r25, r25
+ 1dc:	6a 95       	dec	r22
+ 1de:	e2 f7       	brpl	.-8      	; 0x1d8 <DIO_vid_SetPintDirection+0x48>
+ 1e0:	82 2b       	or	r24, r18
+ 1e2:	84 bb       	out	0x14, r24	; 20
+ 1e4:	08 95       	ret
+			case   DIO_u8PORTD: SET_BIT( DIO_u8DDRD_REG,u8pin) ; break ;
+ 1e6:	21 b3       	in	r18, 0x11	; 17
+ 1e8:	81 e0       	ldi	r24, 0x01	; 1
+ 1ea:	90 e0       	ldi	r25, 0x00	; 0
+ 1ec:	02 c0       	rjmp	.+4      	; 0x1f2 <DIO_vid_SetPintDirection+0x62>
+ 1ee:	88 0f       	add	r24, r24
+ 1f0:	99 1f       	adc	r25, r25
+ 1f2:	6a 95       	dec	r22
+ 1f4:	e2 f7       	brpl	.-8      	; 0x1ee <DIO_vid_SetPintDirection+0x5e>
+ 1f6:	82 2b       	or	r24, r18
+ 1f8:	81 bb       	out	0x11, r24	; 17
+ 1fa:	08 95       	ret
+
+			default : /* worng port */ break;
+		}
+	}
+	else  if (u8dir == INPUT){
+ 1fc:	41 11       	cpse	r20, r1
+ 1fe:	37 c0       	rjmp	.+110    	; 0x26e <DIO_vid_SetPintDirection+0xde>
+
+		switch (u8port){
+ 200:	81 30       	cpi	r24, 0x01	; 1
+ 202:	91 f0       	breq	.+36     	; 0x228 <DIO_vid_SetPintDirection+0x98>
+ 204:	28 f0       	brcs	.+10     	; 0x210 <DIO_vid_SetPintDirection+0x80>
+ 206:	82 30       	cpi	r24, 0x02	; 2
+ 208:	d9 f0       	breq	.+54     	; 0x240 <DIO_vid_SetPintDirection+0xb0>
+ 20a:	83 30       	cpi	r24, 0x03	; 3
+ 20c:	29 f1       	breq	.+74     	; 0x258 <DIO_vid_SetPintDirection+0xc8>
+ 20e:	08 95       	ret
+			case   DIO_u8PORTA: CLR_BIT( DIO_u8DDRA_REG,u8pin) ; break ;
+ 210:	2a b3       	in	r18, 0x1a	; 26
+ 212:	81 e0       	ldi	r24, 0x01	; 1
+ 214:	90 e0       	ldi	r25, 0x00	; 0
+ 216:	02 c0       	rjmp	.+4      	; 0x21c <DIO_vid_SetPintDirection+0x8c>
+ 218:	88 0f       	add	r24, r24
+ 21a:	99 1f       	adc	r25, r25
+ 21c:	6a 95       	dec	r22
+ 21e:	e2 f7       	brpl	.-8      	; 0x218 <DIO_vid_SetPintDirection+0x88>
+ 220:	80 95       	com	r24
+ 222:	82 23       	and	r24, r18
+ 224:	8a bb       	out	0x1a, r24	; 26
+ 226:	08 95       	ret
+			case   DIO_u8PORTB: CLR_BIT( DIO_u8DDRB_REG,u8pin) ; break ;
+ 228:	27 b3       	in	r18, 0x17	; 23
+ 22a:	81 e0       	ldi	r24, 0x01	; 1
+ 22c:	90 e0       	ldi	r25, 0x00	; 0
+ 22e:	02 c0       	rjmp	.+4      	; 0x234 <DIO_vid_SetPintDirection+0xa4>
+ 230:	88 0f       	add	r24, r24
+ 232:	99 1f       	adc	r25, r25
+ 234:	6a 95       	dec	r22
+ 236:	e2 f7       	brpl	.-8      	; 0x230 <DIO_vid_SetPintDirection+0xa0>
+ 238:	80 95       	com	r24
+ 23a:	82 23       	and	r24, r18
+ 23c:	87 bb       	out	0x17, r24	; 23
+ 23e:	08 95       	ret
+			case   DIO_u8PORTC: CLR_BIT( DIO_u8DDRC_REG,u8pin) ; break ;
+ 240:	24 b3       	in	r18, 0x14	; 20
+ 242:	81 e0       	ldi	r24, 0x01	; 1
+ 244:	90 e0       	ldi	r25, 0x00	; 0
+ 246:	02 c0       	rjmp	.+4      	; 0x24c <DIO_vid_SetPintDirection+0xbc>
+ 248:	88 0f       	add	r24, r24
+ 24a:	99 1f       	adc	r25, r25
+ 24c:	6a 95       	dec	r22
+ 24e:	e2 f7       	brpl	.-8      	; 0x248 <DIO_vid_SetPintDirection+0xb8>
+ 250:	80 95       	com	r24
+ 252:	82 23       	and	r24, r18
+ 254:	84 bb       	out	0x14, r24	; 20
+ 256:	08 95       	ret
+			case   DIO_u8PORTD: CLR_BIT( DIO_u8DDRD_REG,u8pin) ; break ;
+ 258:	21 b3       	in	r18, 0x11	; 17
+ 25a:	81 e0       	ldi	r24, 0x01	; 1
+ 25c:	90 e0       	ldi	r25, 0x00	; 0
+ 25e:	02 c0       	rjmp	.+4      	; 0x264 <DIO_vid_SetPintDirection+0xd4>
+ 260:	88 0f       	add	r24, r24
+ 262:	99 1f       	adc	r25, r25
+ 264:	6a 95       	dec	r22
+ 266:	e2 f7       	brpl	.-8      	; 0x260 <DIO_vid_SetPintDirection+0xd0>
+ 268:	80 95       	com	r24
+ 26a:	82 23       	and	r24, r18
+ 26c:	81 bb       	out	0x11, r24	; 17
+ 26e:	08 95       	ret
+
+00000270 <WDT_Start>:
+function return: void
+function description: Start watchdog timer
+*/
+void WDT_Start(u8 time_out) {
+	
+	SET_BIT(WDTCR_REG,WDE_bit) ; // Enable WDT 
+ 270:	91 b5       	in	r25, 0x21	; 33
+ 272:	98 60       	ori	r25, 0x08	; 8
+ 274:	91 bd       	out	0x21, r25	; 33
+	    /* configer WDT  time out   */
+	   WDTCR_REG|=time_out ; // 
+ 276:	91 b5       	in	r25, 0x21	; 33
+ 278:	89 2b       	or	r24, r25
+ 27a:	81 bd       	out	0x21, r24	; 33
+ 27c:	08 95       	ret
+
+0000027e <WDT_Stop>:
+function description: Stop watchdog timer
+*/
+void WDT_Stop(void) {
+	
+	/* Write logical one to WDTOE and WDE */
+	WDTCR_REG |= (1<<WDTOE_bit) | (1<<WDE_bit);
+ 27e:	81 b5       	in	r24, 0x21	; 33
+ 280:	88 61       	ori	r24, 0x18	; 24
+ 282:	81 bd       	out	0x21, r24	; 33
+	/* Turn off WDT */
+	WDTCR_REG = 0x00;
+ 284:	11 bc       	out	0x21, r1	; 33
+ 286:	08 95       	ret
+
+00000288 <_exit>:
+ 288:	f8 94       	cli
+
+0000028a <__stop_program>:
+ 28a:	ff cf       	rjmp	.-2      	; 0x28a <__stop_program>
